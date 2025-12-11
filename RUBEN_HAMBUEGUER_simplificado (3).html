@@ -6155,10 +6155,10 @@ function actualizarInformes(fechaSeleccionada) {
           this.intervalosActivos = new Map();
           this.notificacionesActivas = new Map();
           this.configuracion = {
-            pedidosListos: { habilitado: true, sonido: true, intervalo: 30000 },
-            mesasLargoTiempo: { habilitado: true, sonido: true, intervalo: 900000 }, // 15 min
-            recordatoriosCierre: { habilitado: true, sonido: true, intervalo: 3600000 }, // 1 hora
-            alertasCriticas: { habilitado: true, sonido: true, intervalo: 0 }
+            pedidosListos: { habilitado: false, sonido: false, intervalo: 30000 },
+            mesasLargoTiempo: { habilitado: false, sonido: false, intervalo: 900000 }, // 15 min
+            recordatoriosCierre: { habilitado: false, sonido: false, intervalo: 3600000 }, // 1 hora
+            alertasCriticas: { habilitado: false, sonido: false, intervalo: 0 }
           };
           // No inicializar automáticamente, se hará manualmente después
         }
@@ -6170,13 +6170,11 @@ function actualizarInformes(fechaSeleccionada) {
             return;
           }
 
-          // Solicitar permisos si es necesario
-          await this.solicitarPermisos();
+          // NOTIFICACIONES DESACTIVADAS
+          // await this.solicitarPermisos();
+          // this.iniciarMonitores();
           
-          // Iniciar monitores automáticos
-          this.iniciarMonitores();
-          
-          console.log('🔔 Sistema de notificaciones inicializado');
+          console.log('🔔 Sistema de notificaciones desactivado');
         }
 
         async solicitarPermisos() {
@@ -6438,7 +6436,8 @@ function actualizarInformes(fechaSeleccionada) {
       // Instancia global del sistema de notificaciones
       const sistemaNotificaciones = new SistemaNotificaciones();
 
-      // Inicializar notificaciones después de un breve delay
+      // NOTIFICACIONES AUTOMÁTICAS DESACTIVADAS
+      /*
       setTimeout(() => {
         try {
           sistemaNotificaciones.inicializar();
@@ -6447,6 +6446,7 @@ function actualizarInformes(fechaSeleccionada) {
           console.warn('⚠️ Error inicializando notificaciones:', error);
         }
       }, 2000);
+      */
 
       // Funciones de conveniencia para usar en el código
       function notificarPedidoListo(pedido) {
@@ -7256,34 +7256,34 @@ function actualizarInformes(fechaSeleccionada) {
 
         inicializar() {
           this.configurarReportesPorDefecto();
-          this.iniciarMonitoreoAutomatico();
-          logs.info('Reportes', 'Sistema de reportes automáticos inicializado');
+          // this.iniciarMonitoreoAutomatico(); // DESACTIVADO
+          logs.info('Reportes', 'Sistema de reportes automáticos desactivado');
         }
 
         configurarReportesPorDefecto() {
           if (!this.configuracion.reporteDiario) {
             this.configuracion = {
               reporteDiario: {
-                activo: true,
+                activo: false,
                 hora: '23:30',
                 incluir: ['ventas', 'productos', 'errores']
               },
               reporteSemanal: {
-                activo: true,
+                activo: false,
                 dia: 'domingo',
                 hora: '20:00',
                 incluir: ['resumen', 'tendencias', 'comparativas']
               },
               reporteMensual: {
-                activo: true,
+                activo: false,
                 dia: 1,
                 hora: '09:00',
                 incluir: ['completo', 'analytics', 'recomendaciones']
               },
               alertas: {
-                ventasBajas: { activo: true, umbral: 50 },
-                erroresAltos: { activo: true, umbral: 5 },
-                tiempoRespuestaAlto: { activo: true, umbral: 3000 }
+                ventasBajas: { activo: false, umbral: 50 },
+                erroresAltos: { activo: false, umbral: 5 },
+                tiempoRespuestaAlto: { activo: false, umbral: 3000 }
               }
             };
             this.guardarConfiguracion();
