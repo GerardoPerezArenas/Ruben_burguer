@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Checker - My Little Diner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f6a9bc 0%, #F85065 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #F85065;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .check-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            background: #f5f5f5;
+            transition: all 0.3s ease;
+        }
+        
+        .check-item.success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .check-item.error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .check-item.warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .icon {
+            font-size: 24px;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+        
+        .check-content {
+            flex: 1;
+        }
+        
+        .check-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .check-desc {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .button {
+            background: #F85065;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .button:hover {
+            background: #e6405a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(248, 80, 101, 0.3);
+        }
+        
+        .button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .score {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 48px;
+            font-weight: 700;
+            color: #F85065;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>馃摫 Verificador PWA</h1>
+        <p class="subtitle">Comprobando si la app est谩 lista para instalarse...</p>
+        
+        <div id="results">
+            <div class="loading">
+                <div style="font-size: 48px; margin-bottom: 20px;">馃攳</div>
+                <p>Analizando configuraci贸n PWA...</p>
+            </div>
+        </div>
+        
+        <button class="button" id="openApp" style="display: none;">
+            馃殌 Abrir Aplicaci贸n
+        </button>
+    </div>
+
+    <script>
+        const checks = {
+            https: {
+                title: 'HTTPS Habilitado',
+                test: () => location.protocol === 'https:' || location.hostname === 'localhost',
+                success: 'La aplicaci贸n se sirve de forma segura',
+                error: 'Se requiere HTTPS para PWA. Usa localhost para desarrollo.'
+            },
+            manifest: {
+                title: 'Manifest.json Disponible',
+                test: async () => {
+                    try {
+                        const response = await fetch('./manifest.json');
+                        return response.ok;
+                    } catch (e) {
+                        return false;
+                    }
+                },
+                success: 'Manifiesto de la app cargado correctamente',
+                error: 'No se pudo cargar manifest.json'
+            },
+            serviceWorker: {
+                title: 'Service Worker Disponible',
+                test: () => 'serviceWorker' in navigator,
+                success: 'El navegador soporta Service Workers',
+                error: 'Service Workers no est谩n disponibles'
+            },
+            swFile: {
+                title: 'Archivo sw.js Accesible',
+                test: async () => {
+                    try {
+                        const response = await fetch('./sw.js');
+                        return response.ok;
+                    } catch (e) {
+                        return false;
+                    }
+                },
+                success: 'Service Worker encontrado y accesible',
+                error: 'No se pudo cargar sw.js'
+            },
+            viewport: {
+                title: 'Meta Viewport Configurado',
+                test: () => !!document.querySelector('meta[name="viewport"]'),
+                success: 'Meta viewport configurado para m贸viles',
+                error: 'Falta meta viewport'
+            },
+            themeColor: {
+                title: 'Color de Tema Definido',
+                test: () => !!document.querySelector('meta[name="theme-color"]'),
+                success: 'Color de tema configurado',
+                error: 'Falta meta theme-color'
+            },
+            installable: {
+                title: 'Aplicaci贸n Instalable',
+                test: () => {
+                    return new Promise((resolve) => {
+                        let resolved = false;
+                        window.addEventListener('beforeinstallprompt', (e) => {
+                            if (!resolved) {
+                                resolved = true;
+                                resolve(true);
+                            }
+                        });
+                        setTimeout(() => {
+                            if (!resolved) {
+                                resolved = true;
+                                resolve(false);
+                            }
+                        }, 2000);
+                    });
+                },
+                success: 'La app cumple los criterios de instalaci贸n',
+                error: 'La app podr铆a ya estar instalada o no cumple todos los criterios',
+                isWarning: true
+            }
+        };
+
+        async function runChecks() {
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+            
+            let passed = 0;
+            let total = Object.keys(checks).length;
+            
+            for (const [key, check] of Object.entries(checks)) {
+                const result = await check.test();
+                const item = document.createElement('div');
+                item.className = `check-item ${result ? 'success' : (check.isWarning ? 'warning' : 'error')}`;
+                
+                if (result) passed++;
+                
+                item.innerHTML = `
+                    <div class="icon">${result ? '鉁?': (check.isWarning ? '鈿狅笍' : '鉂?)}</div>
+                    <div class="check-content">
+                        <div class="check-title">${check.title}</div>
+                        <div class="check-desc">${result ? check.success : check.error}</div>
+                    </div>
+                `;
+                
+                results.appendChild(item);
+            }
+            
+            // Mostrar puntuaci贸n
+            const scoreDiv = document.createElement('div');
+            const percentage = Math.round((passed / total) * 100);
+            scoreDiv.className = 'score';
+            scoreDiv.innerHTML = `${percentage}% 馃帀`;
+            results.appendChild(scoreDiv);
+            
+            // Mostrar bot贸n
+            const button = document.getElementById('openApp');
+            button.style.display = 'block';
+            
+            if (percentage >= 70) {
+                const finalMsg = document.createElement('div');
+                finalMsg.style.textAlign = 'center';
+                finalMsg.style.padding = '20px';
+                finalMsg.style.background = '#d4edda';
+                finalMsg.style.borderRadius = '10px';
+                finalMsg.style.marginTop = '20px';
+                finalMsg.innerHTML = `
+                    <div style="font-size: 32px; margin-bottom: 10px;">馃巵</div>
+                    <div style="font-weight: 600; color: #155724; margin-bottom: 5px;">
+                        隆La app est谩 lista para usarse como PWA!
+                    </div>
+                    <div style="font-size: 14px; color: #155724;">
+                        Puedes instalarla en tu dispositivo m贸vil
+                    </div>
+                `;
+                results.appendChild(finalMsg);
+            }
+        }
+
+        // Ejecutar verificaciones al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            runChecks();
+            
+            document.getElementById('openApp').addEventListener('click', () => {
+                window.location.href = './index.html';
+            });
+        });
+    </script>
+</body>
+</html>

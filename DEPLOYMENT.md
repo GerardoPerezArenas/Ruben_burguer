@@ -251,7 +251,7 @@ Puedes a帽adir Google Analytics u otras herramientas:
 
 ```html
 <!-- A帽adir antes de </head> en index.html -->
-<script async src="https://www.googletagman.tics.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
