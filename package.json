@@ -1,0 +1,34 @@
+{
+  "name": "ruben-burguer",
+  "version": "9.0.0",
+  "description": "Sistema de punto de venta para Ruben Burguer - TPV móvil",
+  "main": "index.js",
+  "scripts": {
+    "android": "npx cap add android && npx cap sync && npx cap open android",
+    "ios": "npx cap add ios && npx cap sync && npx cap open ios",
+    "sync": "npx cap sync",
+    "copy": "npx cap copy",
+    "update": "npx cap update",
+    "serve": "npx http-server www -p 8080 -o",
+    "build": "echo 'No build step required - using static files'",
+    "test": "echo \"No tests configured\""
+  },
+  "keywords": [
+    "pos",
+    "tpv",
+    "restaurant",
+    "mobile",
+    "capacitor"
+  ],
+  "author": "Ruben Burguer",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/cli": "^7.4.4",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/ios": "^8.0.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <meta content="yes" name="apple-mobile-web-app-capable"/>
+  <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+  <meta content="yes" name="mobile-web-app-capable"/>
+  <meta content="#F85065" name="theme-color"/>
+  <meta content="Ruben Burguer TPV" name="apple-mobile-web-app-title"/>
+  <meta content="Ruben Burguer TPV" name="application-name"/>
+  <meta content="telephone=no" name="format-detection"/>
+  <meta content="no" name="msapplication-tap-highlight"/>
+  <title>Ruben Burguer TPV v9</title>
+  
+  <!-- PWA Manifest -->
+  <link href="./manifest.json" rel="manifest"/>
+  
+  <!-- Iconos -->
+  <link href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='0.9em' font-size='90'&gt;🍔&lt;/text&gt;&lt;/svg&gt;" rel="icon"/>
+  <link href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='0.9em' font-size='90'&gt;🍔&lt;/text&gt;&lt;/svg&gt;" rel="apple-touch-icon"/>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <div class="login-two-col">
+        <div class="login-form-col">
+          <h1 class="login-title">Ruben Burguer</h1>
+          <p class="login-subtitle">Sistema TPV v9</p>
+          <div id="loginError" class="login-error"></div>
+          <select class="login-select" id="loginUser">
+            <option value="">-- Seleccionar Usuario --</option>
+          </select>
+          <input class="login-input" id="loginPassword" placeholder="Contraseña" type="password"/>
+          <button class="login-button" onclick="hacerLogin()">Entrar</button>
+        </div>
+        <div class="login-logo-col">
+          <div class="login-logo">🍔</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN SCREEN -->
+  <div id="mainScreen">
+    <!-- Header -->
+    <div class="header watermark">
+      <div class="header-title">
+        <span>🍔 Ruben Burguer TPV</span>
+      </div>
+      <div class="header-user">
+        <span id="usuarioActual"></span>
+        <span class="user-badge" id="rolBadge"></span>
+        <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
+      </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+      <h3 class="admin-title">⚙️ Panel de Administración</h3>
+      <div class="admin-grid">
+        <button class="admin-btn" onclick="gestionarUsuarios()">
+          <span class="icon">👤</span>
+          Usuarios
+        </button>
+        <button class="admin-btn" onclick="gestionarProductos()">
+          <span class="icon">🍽️</span>
+          Productos
+        </button>
+        <button class="admin-btn" onclick="gestionarZonas()">
+          <span class="icon">📍</span>
+          Zonas
+        </button>
+        <button class="admin-btn" onclick="verHistorial()">
+          <span class="icon">📊</span>
+          Historial
+        </button>
+        <button class="admin-btn" onclick="mostrarDashboardAnalytics()">
+          <span class="icon">📈</span>
+          Analytics
+        </button>
+        <button class="admin-btn" onclick="mostrarHerramientasAvanzadas()">
+          <span class="icon">🛠️</span>
+          Herramientas
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-value" id="mesasLibres">0</div>
+        <div class="stat-label">Libres</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="mesasOcupadas">0</div>
+        <div class="stat-label">Ocupadas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="totalVentas">€0</div>
+        <div class="stat-label">Ventas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="ticketPromedio">€0</div>
+        <div class="stat-label">Ticket Med.</div>
+      </div>
+    </div>
+
+    <!-- Zones & Tables -->
+    <div class="zones" id="zonasContainer"></div>
+
+    <!-- FAB Resumen -->
+    <div class="fab-resumen" onclick="mostrarResumen()">
+      <span>📋</span>
+      <span id="resumenCount">0</span>
+    </div>
+
+    <!-- FAB Para Llevar -->
+    <div class="fab" onclick="nuevoPedidoParaLlevar()">
+      🥡
+      <div class="fab-badge" id="paraLlevarCount">0</div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal pantalla-completa watermark-modal" id="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Modal</h2>
+        <button class="modal-close" onclick="cerrarModal()">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- JavaScript -->
+  <script src="js/app.js"></script>
+</body>
+</html>
