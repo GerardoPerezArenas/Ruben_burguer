@@ -1,0 +1,28 @@
+{
+  "name": "My Little Diner TPV",
+  "short_name": "Diner TPV",
+  "description": "Sistema de Punto de Venta para My Little Diner",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#b9fad8",
+  "theme_color": "#f85065",
+  "orientation": "portrait",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["food", "business", "productivity"],
+  "lang": "es",
+  "dir": "ltr"
+}
