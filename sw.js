@@ -3,7 +3,9 @@ const CACHE_NAME = 'my-little-diner-v9.0';
 const urlsToCache = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './icon-192.svg',
+  './icon-512.svg'
 ];
 
 // Instalación del Service Worker
@@ -55,7 +57,8 @@ self.addEventListener('fetch', event => {
         // Si no está en cache, hacer petición de red
         return fetch(event.request).then(response => {
           // Verificar si la respuesta es válida
-          if (!response || response.status !== 200 || response.type !== 'basic') {
+          if (!response || (response.status < 200 || response.status >= 300) || 
+              (response.type !== 'basic' && response.type !== 'cors')) {
             return response;
           }
           
