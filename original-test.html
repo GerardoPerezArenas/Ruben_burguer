@@ -1149,7 +1149,25 @@ function actualizarListaUsuarios() {
         min-width: calc(50% - 6px);
       }
 
-
+      /* FAB RESUMEN */
+      .fab-resumen {
+        position: fixed;
+        top: calc(100px + env(safe-area-inset-top));
+        right: 20px;
+        padding: 12px 18px;
+        border-radius: 25px;
+        background: var(--c-light);
+        color: var(--c-brand);
+        border: 3px solid var(--c-brand);
+        box-shadow: 0 6px 20px rgba(248, 80, 101, 0.3);
+        font-size: 0.85em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 998;
+        cursor: pointer;
+      }
 
       /* FAB PARA LLEVAR */
       .fab {
@@ -1724,7 +1742,7 @@ opacity: 1;
 <div class="stat-label">Llevar</div>
 </div>
 </div>
-
+<!-- Bot贸n de resumen eliminado -->
 <div class="zones" id="zonas"></div>
 <div class="modal pantalla-completa" id="modal">
 <div class="modal-content watermark-modal">
@@ -2347,18 +2365,25 @@ actualizarListaUsuarios();
           const statsBar = document.querySelector('.stats-bar');
           const zonas = document.querySelector('.zones');
           const fab = document.querySelector('.fab');
+          const fabResumen = document.querySelector('.fab-resumen');
           if (statsBar) statsBar.style.display = 'none';
           if (zonas) zonas.style.display = 'none';
           if (fab) fab.style.display = 'none';
+          if (fabResumen) fabResumen.style.display = 'flex';
         } else {
           // No admin: ocultar panel admin y mostrar UI normal
           limpiarPanelAdmin();
           const statsBar = document.querySelector('.stats-bar');
           const zonas = document.querySelector('.zones');
           const fab = document.querySelector('.fab');
-          if (statsBar) statsBar.style.display = 'flex';
+          const fabResumen = document.querySelector('.fab-resumen');
+          if (statsBar) {
+            // Ocultar la barra de estad铆sticas para camareros
+            statsBar.style.display = (rolLower === 'camarero') ? 'none' : 'flex';
+          }
           if (zonas) zonas.style.display = 'flex';
           if (fab) fab.style.display = 'block';
+          if (fabResumen) fabResumen.style.display = 'none';
         }
       }
 
@@ -5786,14 +5811,6 @@ function actualizarInformes(fechaSeleccionada) {
         if (!estado.impresoras) estado.impresoras = {};
         if (!estado.impresoras.comida) estado.impresoras.comida = { habilitada: false, ip: '', puerto: 9100 };
         if (!estado.impresoras.bebida) estado.impresoras.bebida = { habilitada: false, ip: '', puerto: 9100 };
-        
-        // Si no hab铆a datos en localStorage, guardar los datos por defecto
-        if (!estadoGuardado || !estado.usuarios || Object.keys(estado.usuarios).length === 0) {
-          console.log('[TPV] Inicializando datos por defecto...');
-          Object.assign(estado, getDefaultData());
-          guardarEstado();
-          console.log('[TPV] Datos por defecto guardados en localStorage');
-        }
       }
 
       function guardarEstado() {
@@ -9422,7 +9439,10 @@ function actualizarInformes(fechaSeleccionada) {
             bottom: max(calc(20px + env(safe-area-inset-bottom)), 20px);
             right: max(20px, env(safe-area-inset-right));
           }
-
+          
+          .fab-resumen {
+            right: max(20px, env(safe-area-inset-right));
+          }
         }
 
         /* Mejoras de tipograf铆a para m贸viles */
