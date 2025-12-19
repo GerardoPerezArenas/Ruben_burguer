@@ -1,0 +1,45 @@
+{
+  "name": "my-little-diner-tpv",
+  "version": "9.0.0",
+  "description": "Sistema de Punto de Venta para Restaurantes - Progressive Web App",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8000 -o",
+    "dev": "npx http-server -p 8000 -o",
+    "serve": "npx http-server -p 8000",
+    "build": "echo 'No build step needed - PWA ready'",
+    "deploy": "echo 'Deploy to your hosting service'"
+  },
+  "keywords": [
+    "pwa",
+    "pos",
+    "point-of-sale",
+    "restaurant",
+    "tpv",
+    "mobile-app",
+    "offline-first",
+    "service-worker"
+  ],
+  "author": "Ruben Burguer",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GerardoPerezArenas/Ruben_burguer.git"
+  },
+  "pwa": {
+    "name": "My Little Diner TPV",
+    "short_name": "Diner TPV",
+    "theme_color": "#f85065",
+    "background_color": "#b9fad8",
+    "display": "standalone",
+    "start_url": "./index.html"
+  }
+}
