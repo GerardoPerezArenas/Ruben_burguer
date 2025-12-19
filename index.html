@@ -5811,6 +5811,14 @@ function actualizarInformes(fechaSeleccionada) {
         if (!estado.impresoras) estado.impresoras = {};
         if (!estado.impresoras.comida) estado.impresoras.comida = { habilitada: false, ip: '', puerto: 9100 };
         if (!estado.impresoras.bebida) estado.impresoras.bebida = { habilitada: false, ip: '', puerto: 9100 };
+        
+        // Si no hab铆a datos en localStorage, guardar los datos por defecto
+        if (!estadoGuardado || !estado.usuarios || !Object.keys(estado.usuarios).length) {
+          console.log('[TPV] Inicializando datos por defecto...');
+          Object.assign(estado, getDefaultData());
+          guardarEstado();
+          console.log('[TPV] Datos por defecto guardados en localStorage');
+        }
       }
 
       function guardarEstado() {
